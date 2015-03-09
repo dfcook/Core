@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdoNetQueryObject.cs" />
+    <Compile Include="ConventionMapper.cs" />
     <Compile Include="AttributeMapper.cs" />
     <Compile Include="ColumnMissingException.cs" />
     <Compile Include="DataReaderExtensions.cs" />

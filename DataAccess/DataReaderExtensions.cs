@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Reflection;
+
+using DanielCook.Core.Attributes;
+using DanielCook.Core.Extensions;
 
 namespace DanielCook.Core.DataAccess
 {
@@ -13,7 +18,7 @@ namespace DanielCook.Core.DataAccess
 
         public static ICollection<T> MapList<T>(this IDataReader reader) where T : new() 
         {
-            return new AttributeMapper<T>().MapList(reader);
+            return reader.MapList<T>(GetMapper<T>());
         }
 
         public static T Map<T>(this IDataReader reader, IObjectMapper<T> mapper) 
@@ -23,7 +28,16 @@ namespace DanielCook.Core.DataAccess
 
         public static T Map<T>(this IDataReader reader) where T : new()
         {
-            return new AttributeMapper<T>().Map(reader);
+            return reader.Map<T>(GetMapper<T>());
+        }
+
+        private static IObjectMapper<T> GetMapper<T>() where T: new()
+        {
+            var useAttributeMapping = typeof(T).GetProperties().
+                Any(x => x.GetCustomAttributes().
+                    Any(y => y is ColumnAttribute));
+
+            return useAttributeMapping ? (IObjectMapper<T>)new AttributeMapper<T>() : new ConventionMapper<T>();
         }
     }
 }

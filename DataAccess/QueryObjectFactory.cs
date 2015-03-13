@@ -23,9 +23,21 @@ namespace DanielCook.Core.DataAccess
         public IQueryObject GetQuery(string commandText)
         {
             var commandType = QueryType == QueryType.Adhoc ? CommandType.Text : CommandType.StoredProcedure;
-            return DatabaseType == DatabaseType.Oracle ?
-                (IQueryObject)new OracleQueryObject(ConnectionString, commandText, commandType) :
-                (IQueryObject)new SqlServerQueryObject(ConnectionString, commandText, commandType);            
+
+            switch (DatabaseType)
+            {
+                case DatabaseType.Oracle:
+                    return new OracleQueryObject(ConnectionString, commandText, commandType);
+
+                case DatabaseType.SqlServer:
+                    return new SqlServerQueryObject(ConnectionString, commandText, commandType);
+
+                case DatabaseType.MySql:
+                    return new MySqlQueryObject(ConnectionString, commandText, commandType);
+
+                default:
+                    throw new ArgumentException(string.Format("Unknown DatabaseType: ", DatabaseType));
+            }            
         }        
     }
 }

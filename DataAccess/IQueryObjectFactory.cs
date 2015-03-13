@@ -9,7 +9,8 @@
     public enum DatabaseType
     {
         SqlServer,
-        Oracle
+        Oracle,
+        MySql
     }
 
     public interface IQueryObjectFactory

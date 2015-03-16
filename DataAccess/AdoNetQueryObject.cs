@@ -84,6 +84,7 @@ namespace DanielCook.Core.DataAccess
             {
                 using (var cmd = GetCommand(cn))
                 {
+                    cn.Open();
                     return cmd.ExecuteNonQuery();
                 }
             }

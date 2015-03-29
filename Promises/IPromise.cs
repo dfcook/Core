@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Promises
 {
-    interface IPromise
+    public interface IPromise
     {
+        Exception Exception { get; set; }
     }
 }

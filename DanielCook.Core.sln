@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "Extensions\Extensions.csproj", "{5F1DB64A-6E8C-4DEA-87BE-BE9F3F639690}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Promises", "Promises\Promises.csproj", "{CC087742-E8A3-4F09-9764-876351B8A340}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5F1DB64A-6E8C-4DEA-87BE-BE9F3F639690}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F1DB64A-6E8C-4DEA-87BE-BE9F3F639690}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F1DB64A-6E8C-4DEA-87BE-BE9F3F639690}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC087742-E8A3-4F09-9764-876351B8A340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC087742-E8A3-4F09-9764-876351B8A340}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC087742-E8A3-4F09-9764-876351B8A340}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC087742-E8A3-4F09-9764-876351B8A340}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

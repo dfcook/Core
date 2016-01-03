@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DanielCook.Core.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,16 +9,21 @@ namespace DanielCook.Core.Extensions
     {
         public static IEnumerable<U> Map<T,U>(this IEnumerable<T> source, Func<T, U> mapper)
         {
-            return source == null ? new List<U>() : from t in source select mapper(t);        
+            source = source ?? new T[0];
+
+            foreach (var t in source)
+                yield return mapper(t);
         }
             
-        public static void Each<T>(this IEnumerable<T> source, Action<T> action)
-        {
+        public static IEnumerable<T> Each<T>(this IEnumerable<T> source, Action<T> action)
+        {            
             if (source != null)
             {
                 foreach (var t in source)
                     action(t);
             }
+
+            return source;
         }
 
         public static IEnumerable<T> Merge<T>(this IEnumerable<T> source, IEnumerable<T> toMerge)
@@ -30,25 +36,25 @@ namespace DanielCook.Core.Extensions
             return list;
         }
 
-        public static T Find<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        public static Option<T> Find<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             return source == null ?
-                default(T) :
-                source.FirstOrDefault(predicate);        
+                Option<T>.None() :
+                Option<T>.Some(source.Single(predicate));
         }
 
         public static IEnumerable<T> Filter<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             return source == null ?
-                new List<T>() :
+                new T[0] :
                 source.Where(predicate);
         }
             
         public static IEnumerable<T> Reject<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             return source == null ?
-                new List<T>() :
-                from t in source where !predicate(t) select t;        
+                new T[0] :
+                source.Where(x => !predicate(x));
         }
             
         public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> source)

@@ -13,21 +13,21 @@ namespace DanielCook.Core.DataAccess
 
         protected abstract IDbDataParameter CreateParameter();
 
-        protected IDictionary<string, IDbDataParameter> Parameters { get; private set;}
+        protected IDictionary<string, IDbDataParameter> Parameters { get; private set; }
 
         protected string ConnectionString { get; private set; }
         protected CommandType CommandType { get; private set; }
         protected string CommandText { get; private set; }
-        
+
         private int Timeout { get; set; }
 
-        public AdoNetQueryObject(string connectionString, string commandText, CommandType commandType, int timeout)
+        protected AdoNetQueryObject(string connectionString, string commandText, CommandType commandType, int timeout)
             : this(connectionString, commandText, commandType)
         {
-            Timeout = timeout;            
+            Timeout = timeout;
         }
 
-        public AdoNetQueryObject(string connectionString, string commandText, CommandType commandType)
+        protected AdoNetQueryObject(string connectionString, string commandText, CommandType commandType)
         {
             Timeout = DefaultTimeout;
             ConnectionString = connectionString;
@@ -55,7 +55,7 @@ namespace DanielCook.Core.DataAccess
 
             parameter.Direction = ParameterDirection.Output;
             parameter.ParameterName = parameterName;
-            parameter.DbType = GetDbType(typeof(T));            
+            parameter.DbType = GetDbType(typeof(T));
 
             Parameters.Add(parameterName, parameter);
 
@@ -65,7 +65,7 @@ namespace DanielCook.Core.DataAccess
         public IQueryObject AddParameter<T>(string parameterName, T value)
         {
             var parameter = CreateParameter();
-            
+
             parameter.Direction = ParameterDirection.Input;
             parameter.ParameterName = parameterName;
             parameter.DbType = GetDbType(typeof(T));
@@ -76,7 +76,7 @@ namespace DanielCook.Core.DataAccess
             return this;
         }
 
-        public abstract IQueryObject AddTableParameter<T>(string parameterName, DataTable table);        
+        public abstract IQueryObject AddTableParameter<T>(string parameterName, DataTable table);
 
         public int Execute()
         {
@@ -93,7 +93,7 @@ namespace DanielCook.Core.DataAccess
         public ICollection<T> ExecuteList<T>() where T : new()
         {
             using (var reader = ExecuteReader())
-                return reader.MapList<T>();            
+                return reader.MapList<T>();
         }
 
         public ICollection<T> ExecuteList<T>(IObjectMapper<T> mapper)

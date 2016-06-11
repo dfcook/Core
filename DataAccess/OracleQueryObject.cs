@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Oracle.ManagedDataAccess.Client;
+using System;
 using System.Data;
-using Oracle.ManagedDataAccess.Client;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DanielCook.Core.DataAccess
 {
     public class OracleQueryObject : AdoNetQueryObject
     {
-        public OracleQueryObject(string connectionString, string commandText, int timeout, CommandType commandType) : 
+        public OracleQueryObject(string connectionString, string commandText, int timeout, CommandType commandType) :
             base(connectionString, commandText, commandType, timeout)
-        {            
+        {
         }
 
         public OracleQueryObject(string connectionString, string commandText, CommandType commandType)
             : base(connectionString, commandText, commandType)
-        {            
+        {
         }
 
         protected override IDbConnection GetConnection()

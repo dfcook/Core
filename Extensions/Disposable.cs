@@ -11,5 +11,13 @@ namespace DanielCook.Core.Extensions
                 action(obj);
             }
         }
+
+        public static V Using<T,V>(Func<T> creator, Func<T,V> action) where T : IDisposable
+        {
+            using (var obj = creator())
+            {
+                return action(obj);
+            }
+        }
     }
 }

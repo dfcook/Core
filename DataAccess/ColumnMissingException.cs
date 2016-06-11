@@ -4,10 +4,10 @@ namespace DanielCook.Core.DataAccess
 {
     public class ColumnMissingException : Exception
     {
-        public string ColumnName { get; private set; }
+        public string ColumnName { get; }
 
-        public ColumnMissingException(string columnName) : 
-            base(string.Format("Unable to find column {0} in the resultset", columnName))
+        public ColumnMissingException(string columnName) :
+            base($"Unable to find column {columnName} in the resultset")
         {
             ColumnName = columnName;
         }

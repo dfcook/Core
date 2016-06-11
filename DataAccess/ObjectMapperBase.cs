@@ -1,8 +1,6 @@
-﻿using System;
+﻿using DanielCook.Core.Extensions;
 using System.Collections.Generic;
 using System.Data;
-
-using DanielCook.Core.Extensions;
 
 namespace DanielCook.Core.DataAccess
 {
@@ -10,7 +8,7 @@ namespace DanielCook.Core.DataAccess
     {
         private IDictionary<string, int> OrdinalMappings { get; set; }
 
-        private IDictionary<string, int> GetOrdinalMappings(IDataRecord reader)
+        private static IDictionary<string, int> GetOrdinalMappings(IDataRecord reader)
         {
             var mappings = new Dictionary<string, int>();
             0.To(reader.FieldCount - 1).Each(x => mappings.Add(reader.GetName(x), x));
@@ -34,9 +32,6 @@ namespace DanielCook.Core.DataAccess
             return Map(record, OrdinalMappings ?? GetOrdinalMappings(record));
         }
 
-        public virtual T Map(IDataRecord record, IDictionary<string, int> ordinalMappings)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract T Map(IDataRecord record, IDictionary<string, int> ordinalMappings);
     }
 }

@@ -9,12 +9,12 @@ namespace DanielCook.Core.DataAccess
 {
     public class AttributeMapper<T> : ObjectMapperBase<T> where T : new()
     {
-        private static IDictionary<Type, ICollection<AttributeMapping>> CachedMappings { get; set;  }
+        private static IDictionary<Type, ICollection<AttributeMapping>> CachedMappings { get; set; }
         private ICollection<AttributeMapping> Mappings { get; set; }
 
         static AttributeMapper()
         {
-             CachedMappings = new Dictionary<Type, ICollection<AttributeMapping>>();
+            CachedMappings = new Dictionary<Type, ICollection<AttributeMapping>>();
         }
 
         public AttributeMapper()
@@ -66,7 +66,7 @@ namespace DanielCook.Core.DataAccess
                             }
                             catch (Exception ex)
                             {
-                                throw new Exception(string.Format("Error mapping {0} : {1}", columnName, ex.Message));
+                                throw new Exception($"Error mapping {columnName} : {ex.Message}");
                             }
                         });
                 }
@@ -77,7 +77,7 @@ namespace DanielCook.Core.DataAccess
 
         private class AttributeMapping
         {
-            public string ColumnName { get; private set;  }
+            public string ColumnName { get; private set; }
             public Action<object, object> Setter { get; private set; }
 
             public AttributeMapping(string columnName, PropertyInfo property)
@@ -90,17 +90,17 @@ namespace DanielCook.Core.DataAccess
             {
                 var setter = property.GetSetMethod();
                 if (setter == null)
-                    throw new ArgumentException(string.Format("Property {0} does not have a setter method", property.Name));
+                    throw new ArgumentException($"Property {property.Name} does not have a setter method");
 
-                var method = typeof(AttributeMapping).GetMethod("CreateGenericSetter", BindingFlags.Instance | BindingFlags.NonPublic);
+                var method = typeof(AttributeMapping).GetMethod(nameof(CreateGenericSetter), BindingFlags.Instance | BindingFlags.NonPublic);
                 var helper = method.MakeGenericMethod(property.PropertyType);
                 return (Action<object, object>)helper.Invoke(this, new object[] { setter });
             }
 
-            private Action<object, object> CreateGenericSetter<V>(MethodInfo setter)
+            private static Action<object, object> CreateGenericSetter<V>(MethodInfo setter)
             {
                 var typedSetter = (Action<T, V>)Delegate.CreateDelegate(typeof(Action<T, V>), setter);
-                return (Action<object, object>)((instance, value) => typedSetter((T)instance, (V)value));                
+                return (Action<object, object>)((instance, value) => typedSetter((T)instance, (V)value));
             }
         }
     }

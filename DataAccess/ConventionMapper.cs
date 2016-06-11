@@ -1,10 +1,9 @@
-﻿using DanielCook.Core.Attributes;
-using DanielCook.Core.Extensions;
+﻿using DanielCook.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 
 namespace DanielCook.Core.DataAccess
 {
@@ -57,7 +56,7 @@ namespace DanielCook.Core.DataAccess
                             }
                             catch (Exception ex)
                             {
-                                throw new Exception(string.Format("Error mapping {0} : {1}", columnName, ex.Message));
+                                throw new Exception($"Error mapping {columnName} : {ex.Message}");
                             }
                         });
                 }
@@ -81,17 +80,17 @@ namespace DanielCook.Core.DataAccess
             {
                 var setter = property.GetSetMethod();
                 if (setter == null)
-                    throw new ArgumentException(string.Format("Property {0} does not have a setter method", property.Name));
+                    throw new ArgumentException($"Property {property.Name} does not have a setter method");
 
-                var method = typeof(PropertyMapping).GetMethod("CreateGenericSetter", BindingFlags.Instance | BindingFlags.NonPublic);
+                var method = typeof(PropertyMapping).GetMethod(nameof(CreateGenericSetter), BindingFlags.Instance | BindingFlags.NonPublic);
                 var helper = method.MakeGenericMethod(property.PropertyType);
                 return (Action<object, object>)helper.Invoke(this, new object[] { setter });
             }
 
-            private Action<object, object> CreateGenericSetter<V>(MethodInfo setter)
+            private static Action<object, object> CreateGenericSetter<V>(MethodInfo setter)
             {
                 var typedSetter = (Action<T, V>)Delegate.CreateDelegate(typeof(Action<T, V>), setter);
-                return (Action<object, object>)((instance, value) => typedSetter((T)instance, (V)value));                
+                return (Action<object, object>)((instance, value) => typedSetter((T)instance, (V)value));
             }
         }
     }

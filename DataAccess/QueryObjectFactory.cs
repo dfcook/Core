@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DanielCook.Core.DataAccess
 {
@@ -36,8 +32,8 @@ namespace DanielCook.Core.DataAccess
                     return new MySqlQueryObject(ConnectionString, commandText, commandType);
 
                 default:
-                    throw new ArgumentException(string.Format("Unknown DatabaseType: ", DatabaseType));
-            }            
-        }        
+                    throw new ArgumentException($"Unknown DatabaseType: {DatabaseType}");
+            }
+        }
     }
 }

@@ -3,9 +3,9 @@
 namespace DanielCook.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class ColumnAttribute : Attribute
+    public sealed class ColumnAttribute : Attribute
     {
-        public string ColumnName { get; private set; }
+        public string ColumnName { get; }
 
         public ColumnAttribute(string columnName)
         {

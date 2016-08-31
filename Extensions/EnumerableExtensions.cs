@@ -17,6 +17,29 @@ namespace DanielCook.Core.Extensions
                 yield return mapper(t);
         }
 
+        public static T Head<T>(this IEnumerable<T> source) =>
+            source == null ? default(T) : source.FirstOrDefault();
+
+        public static IEnumerable<T> Tail<T>(this IEnumerable<T> source) =>
+            source == null ? new T[0] : source.Skip(1);
+
+        public static T Reduce<T>(this IEnumerable<T> source, T start, Func<T, T, T> reducer)
+        {
+            if (reducer == null)
+                throw new ArgumentNullException(nameof(reducer));
+
+            return (source != null && source.Any()) ?
+                source.Tail().
+                    Reduce(reducer(start, source.Head()), reducer) :
+                start;
+        }
+
+        public static bool DeepEquals<T>(this IEnumerable<T> source, IEnumerable<T> comparison)
+        {
+            return ((source.Count() == comparison.Count()) &&
+                    (source.All(x => comparison.Any(y => y.Equals(x)))));
+        }
+
         public static IEnumerable<T> Each<T>(this IEnumerable<T> source, Action<T> action)
         {
             if (action == null)
@@ -31,31 +54,43 @@ namespace DanielCook.Core.Extensions
             return source;
         }
 
-        public static IEnumerable<T> Merge<T>(this IEnumerable<T> source, IEnumerable<T> toMerge)
+        public static IEnumerable<T> Merge<T>(this IEnumerable<T> source,
+            params IEnumerable<T>[] toMerge)
         {
-            if (source == null || toMerge == null || !toMerge.Any())
-                return source;
+            source = source ?? new T[0];
+            toMerge = toMerge ?? new[] { new T[0] };
 
-            var list = new List<T>(source);
-            list.AddRange(toMerge);
-            return list;
+            foreach (var s in source)
+                yield return s;
+
+            foreach (var m in toMerge.Filter(_ => _ != null))
+                foreach (var s in m)
+                    yield return s;
         }
 
-        public static T Find<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        public static T Find<T>(this IEnumerable<T> source,
+            Func<T, bool> predicate)
         {
+            predicate.ThrowIfNull(nameof(predicate));
+
             return source == null ?
                 default(T) :
-                source.Single(predicate);
+                source.SingleOrDefault(predicate);
         }
 
-        public static IEnumerable<T> Filter<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+
+        public static IEnumerable<T> Filter<T>(this IEnumerable<T> source,
+            Func<T, bool> predicate)
         {
+            predicate.ThrowIfNull(nameof(predicate));
+
             return source == null ?
                 new T[0] :
                 source.Where(predicate);
         }
 
-        public static IEnumerable<T> Reject<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        public static IEnumerable<T> Reject<T>(this IEnumerable<T> source,
+            Func<T, bool> predicate)
         {
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
@@ -67,13 +102,22 @@ namespace DanielCook.Core.Extensions
 
         public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> source)
         {
-            IEnumerable<T> list = new List<T>();
-            source.Each(x => list = list.Merge(x));
-            return list;
+            source = source ?? new[] { new T[0] };
+
+            foreach (var inner in source)
+            {
+                var lst = inner ?? new T[0];
+
+                foreach (var t in lst)
+                    yield return t;
+            }
         }
 
-        public static IEnumerable<U> FlatMap<T, U>(this IEnumerable<IEnumerable<T>> source, Func<T, U> projection)
+        public static IEnumerable<U> FlatMap<T, U>(this IEnumerable<IEnumerable<T>> source,
+            Func<T, U> projection)
         {
+            projection.ThrowIfNull(nameof(projection));
+
             return source.Flatten().Map(projection);
         }
     }

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Promises", "Promises\Promis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlGenerator", "SqlGenerator\SqlGenerator.csproj", "{F8ECDF94-761D-4591-AAAA-131228F9B31A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functional", "Functional\Functional.csproj", "{44E1511B-BCE3-4115-A10C-3523B1FD472C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{F8ECDF94-761D-4591-AAAA-131228F9B31A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8ECDF94-761D-4591-AAAA-131228F9B31A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8ECDF94-761D-4591-AAAA-131228F9B31A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44E1511B-BCE3-4115-A10C-3523B1FD472C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44E1511B-BCE3-4115-A10C-3523B1FD472C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44E1511B-BCE3-4115-A10C-3523B1FD472C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44E1511B-BCE3-4115-A10C-3523B1FD472C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

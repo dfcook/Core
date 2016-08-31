@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using DanielCook.Core.Functional;
 
 namespace DanielCook.Core.DataAccess
 {
@@ -26,13 +27,13 @@ namespace DanielCook.Core.DataAccess
 
         Task<IEnumerable<T>> ExecuteListAsync<T>() where T : new();
 
-        T ExecuteObject<T>(IObjectMapper<T> mapper);
+        Maybe<T> ExecuteObject<T>(IObjectMapper<T> mapper) where T : class;
 
-        T ExecuteObject<T>() where T : new();
+        Maybe<T> ExecuteObject<T>() where T : class, new();
 
-        Task<T> ExecuteObjectAsync<T>(IObjectMapper<T> mapper);
+        Task<Maybe<T>> ExecuteObjectAsync<T>(IObjectMapper<T> mapper) where T : class;
 
-        Task<T> ExecuteObjectAsync<T>() where T : new();
+        Task<Maybe<T>> ExecuteObjectAsync<T>() where T : class, new();
 
         PagedResult<T> ExecutePagedResult<T>() where T : new();
 

@@ -4,10 +4,11 @@ using System.Linq;
 using DanielCook.Core.Attributes;
 using DanielCook.Core.DataAccess.MetaData;
 using DanielCook.Core.Extensions;
+using DanielCook.Core.Functional;
 
 namespace DanielCook.Core.DataAccess
 {
-    public class PersistenceManager<T> : IPersistenceManager<T> where T : new()
+    public class PersistenceManager<T> : IPersistenceManager<T> where T : class, new()
     {
         private readonly ReflectionMapper<T> _mapper;
         private readonly IQueryObjectFactory _queryFactory;
@@ -63,12 +64,12 @@ namespace DanielCook.Core.DataAccess
                     _mapper.Mappings, dynamicParameters).
                 ExecuteList(_mapper);
 
-        public T Find(object dynamicParameters) =>
+        public Maybe<T> Find(object dynamicParameters) =>
             QueryBuilder.
                 BuildSelectQuery(_queryFactory, _tableName, _mapper.Mappings, dynamicParameters).
                 ExecuteObject(_mapper);
 
-        public T Get<V>(V key)
+        public Maybe<T> Get<V>(V key)
         {
             var parameters = new[]
             {

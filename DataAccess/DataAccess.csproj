@@ -95,6 +95,10 @@
       <Project>{5f1db64a-6e8c-4dea-87be-be9f3f639690}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Functional\Functional.csproj">
+      <Project>{44E1511B-BCE3-4115-A10C-3523B1FD472C}</Project>
+      <Name>Functional</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SqlGenerator\SqlGenerator.csproj">
       <Project>{f8ecdf94-761d-4591-aaaa-131228f9b31a}</Project>
       <Name>SqlGenerator</Name>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using DanielCook.Core.Extensions;
+using DanielCook.Core.Functional;
 
 namespace DanielCook.Core.DataAccess
 {
@@ -112,13 +113,13 @@ namespace DanielCook.Core.DataAccess
             Disposable.Using(() => ExecuteReader(),
                 rdr => rdr.MapList(mapper));
 
-        public T ExecuteObject<T>() where T : new() =>
+        public Maybe<T> ExecuteObject<T>() where T : class, new() =>
             Disposable.Using(() => ExecuteReader(),
-                rdr => rdr.Read() ? rdr.Map<T>() : default(T));
+                rdr => rdr.Read() ? rdr.Map<T>() : default(T)).ToMaybe();
 
-        public T ExecuteObject<T>(IObjectMapper<T> mapper) =>
+        public Maybe<T> ExecuteObject<T>(IObjectMapper<T> mapper) where T : class =>
             Disposable.Using(() => ExecuteReader(),
-                rdr => rdr.Read() ? rdr.Map(mapper) : default(T));
+                rdr => rdr.Read() ? rdr.Map(mapper) : default(T)).ToMaybe();
 
         public T ExecuteScalar<T>() =>
             Disposable.Using(() => ExecuteReader(),
@@ -195,10 +196,10 @@ namespace DanielCook.Core.DataAccess
         public Task<IEnumerable<T>> ExecuteListAsync<T>() where T : new() =>
             Task.Factory.StartNew(() => ExecuteList<T>());
 
-        public Task<T> ExecuteObjectAsync<T>(IObjectMapper<T> mapper) =>
+        public Task<Maybe<T>> ExecuteObjectAsync<T>(IObjectMapper<T> mapper) where T : class =>
             Task.Factory.StartNew(() => ExecuteObject(mapper));
 
-        public Task<T> ExecuteObjectAsync<T>() where T : new() =>
+        public Task<Maybe<T>> ExecuteObjectAsync<T>() where T : class, new() =>
             Task.Factory.StartNew(() => ExecuteObject<T>());
 
         public IEnumerable<IDictionary<string, object>> ExecuteUntypedList() =>

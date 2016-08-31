@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using DanielCook.Core.Functional;
 
 namespace DanielCook.Core.DataAccess
 {
-    public interface IPersistenceManager<T> where T : new()
+    public interface IPersistenceManager<T> where T : class, new()
     {
         IEnumerable<T> All();
 
@@ -10,9 +11,9 @@ namespace DanielCook.Core.DataAccess
 
         IEnumerable<T> Filter(object dynamicParameters);
 
-        T Find(object dynamicParameters);
+        Maybe<T> Find(object dynamicParameters);
 
-        T Get<V>(V key);
+        Maybe<T> Get<V>(V key);
 
         void Delete(T entity);
         void Insert(T entity);
